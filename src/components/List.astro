@@ -1,0 +1,23 @@
+---
+import { Counter } from "./Counter.tsx";
+
+interface Props {
+    nombre: string;
+    precio: number;
+}
+
+const { nombre, precio } = Astro.props;
+---
+
+<div transition:persist class="flex justify-between mt-2">
+    <div>
+        <h2>
+            {nombre}
+            <span> - </span>
+            {precio}<span>€</span>
+        </h2>
+    </div>
+    <div>
+        <Counter client:visible />
+    </div>
+</div>

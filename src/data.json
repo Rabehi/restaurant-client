@@ -1,0 +1,110 @@
+{
+    "entrantes": [
+        {
+            "id": 1,
+            "nombre": "Ensalada de tomate y mozzarella",
+            "precio": 10.00
+        },
+        {
+            "id": 2,
+            "nombre": "Carpaccio de salmón con aguacate",
+            "precio": 12.00
+        },
+        {
+            "id": 3,
+            "nombre": "Tabla de quesos variados",
+            "precio": 15.00
+        },
+        {
+            "id": 4,
+            "nombre": "Croquetas de jamón ibérico",
+            "precio": 12.00
+        },
+        {
+            "id": 5,
+            "nombre": "Crema de verduras",
+            "precio": 8.00
+        }
+    ],
+    "principales": [
+        {
+            "id": 6,
+            "nombre": "Paella valenciana",
+            "precio": 15.00
+        },
+        {
+            "id": 7,
+            "nombre": "Lubina a la espalda con patatas al horno",
+            "precio": 18.00
+        },
+        {
+            "id": 8,
+            "nombre": "Solomillo de ternera con salsa de setas",
+            "precio": 20.00
+        },
+        {
+            "id": 9,
+            "nombre": "Risotto de setas y trufa",
+            "precio": 16.00
+        },
+        {
+            "id": 10,
+            "nombre": "Lasaña boloñesa",
+            "precio": 12.00
+        }
+    ],
+    "postres": [
+        {
+            "id": 11,
+            "nombre": "Tarta de queso",
+            "precio": 8.00
+        },
+        {
+            "id": 12,
+            "nombre": "Flan de huevo",
+            "precio": 6.00
+        },
+        {
+            "id": 13,
+            "nombre": "Tiramisú",
+            "precio": 8.00
+        },
+        {
+            "id": 14,
+            "nombre": "Helado de chocolate",
+            "precio": 5.00
+        },
+        {
+            "id": 15,
+            "nombre": "Fruta fresca",
+            "precio": 6.00
+        }
+    ],
+    "bebidas": [
+        {
+            "id": 16,
+            "nombre": "Agua mineral",
+            "precio": 2.00
+        },
+        {
+            "id": 17,
+            "nombre": "Vino tinto",
+            "precio": 15.00
+        },
+        {
+            "id": 18,
+            "nombre": "Vino blanco",
+            "precio": 12.00
+        },
+        {
+            "id": 19,
+            "nombre": "Cerveza",
+            "precio": 2.50
+        },
+        {
+            "id": 20,
+            "nombre": "Refrescos",
+            "precio": 2.00
+        }
+    ]
+}
