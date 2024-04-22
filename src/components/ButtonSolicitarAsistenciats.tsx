@@ -6,7 +6,7 @@ import ButtonIcon from './ButtonIcon';
 
 const ButtonSolicitarAsistenciats: React.FC = () => {
     const handleButtonClick = () => {
-        toast.info('¡Asistencia solicitada!');
+        toast.warn('¡Asistencia solicitada!');
     };
 
     return (

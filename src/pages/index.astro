@@ -6,24 +6,24 @@ import AccordeonSvg from "../components/AccordeonSvg.astro";
 import ButtonEnviarPedido from "../components/ButtonEnviarPedido.astro";
 import ButtonSolicitarAsistencia from "../components/ButtonSolicitarAsistencia.astro";
 import ButtonSolicitarCuenta from "../components/ButtonSolicitarCuenta.astro";
-import data from "../data.json";
 
-const entrantes = data.entrantes;
-const principales = data.principales;
-const postres = data.postres;
-const bebidas = data.bebidas;
+const response = await fetch("http://localhost:3000/productos");
+const data = await response.json();
+
+const entrantes = data.filter((entrante: Producto) => entrante.categoria === 2);
+const principales = data.filter(
+	(principal: Producto) => principal.categoria === 3,
+);
+const postres = data.filter((postre: Producto) => postre.categoria === 4);
+const bebidas = data.filter((bebida: Producto) => bebida.categoria === 1);
 
 interface Producto {
 	id: number;
 	nombre: string;
 	precio: number;
-}
-
-interface Data {
-	entrantes: Producto[];
-	principales: Producto[];
-	postres: Producto[];
-	bebidas: Producto[];
+	categoria: number;
+	descripcion: string;
+	imagen: string;
 }
 ---
 
@@ -54,8 +54,9 @@ interface Data {
 						class="p-5 border border-t-0 border-gray-200 dark:border-gray-700"
 					>
 						{
-							entrantes.map((entrante) => (
+							entrantes.map((entrante: Producto) => (
 								<List
+									id={entrante.id}
 									nombre={entrante.nombre}
 									precio={entrante.precio}
 								/>
@@ -87,8 +88,9 @@ interface Data {
 						class="p-5 border border-t-0 border-gray-200 dark:border-gray-700"
 					>
 						{
-							principales.map((principal) => (
+							principales.map((principal: Producto) => (
 								<List
+									id={principal.id}
 									nombre={principal.nombre}
 									precio={principal.precio}
 								/>
@@ -120,8 +122,9 @@ interface Data {
 						class="p-5 border border-t-0 border-gray-200 dark:border-gray-700"
 					>
 						{
-							postres.map((postre) => (
+							postres.map((postre: Producto) => (
 								<List
+									id={postre.id}
 									nombre={postre.nombre}
 									precio={postre.precio}
 								/>
@@ -153,8 +156,9 @@ interface Data {
 						class="p-5 border border-t-0 border-gray-200 dark:border-gray-700"
 					>
 						{
-							bebidas.map((bebida) => (
+							bebidas.map((bebida: Producto) => (
 								<List
+									id={bebida.id}
 									nombre={bebida.nombre}
 									precio={bebida.precio}
 								/>
