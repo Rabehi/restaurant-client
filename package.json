@@ -13,8 +13,8 @@
     "@astrojs/check": "^0.5.10",
     "@astrojs/react": "^3.3.0",
     "@astrojs/tailwind": "^5.1.0",
+    "@babel/core": "^7.26.0",
     "@types/react-dom": "^18.2.25",
-    "astro": "^4.5.10",
     "flowbite": "^2.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -23,6 +23,9 @@
     "typescript": "^5.4.3"
   },
   "devDependencies": {
-    "@types/react": "^18.2.79"
+    "@babel/parser": "^7.26.5",
+    "@types/react": "^18.2.79",
+    "astro": "^4.16.16",
+    "vite": "^6.0.7"
   }
 }

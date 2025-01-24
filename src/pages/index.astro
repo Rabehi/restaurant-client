@@ -1,180 +1,38 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro";
-import List from "../components/List.astro";
-import AccordeonSvg from "../components/AccordeonSvg.astro";
-import ButtonEnviarPedido from "../components/ButtonEnviarPedido.astro";
-import ButtonSolicitarAsistencia from "../components/ButtonSolicitarAsistencia.astro";
-import ButtonSolicitarCuenta from "../components/ButtonSolicitarCuenta.astro";
+import App from "../components/App";
 
+// Cargar los datos del servidor de manera síncrona
 const response = await fetch("http://localhost:3000/productos");
-const data = await response.json();
+const productos = await response.json();
 
-const entrantes = data.filter((entrante: Producto) => entrante.categoria === 2);
-const principales = data.filter(
-	(principal: Producto) => principal.categoria === 3,
-);
-const postres = data.filter((postre: Producto) => postre.categoria === 4);
-const bebidas = data.filter((bebida: Producto) => bebida.categoria === 1);
-
-interface Producto {
-	id: number;
-	nombre: string;
-	precio: number;
-	categoria: number;
-	descripcion: string;
-	imagen: string;
-}
+// Filtrar las categorías dentro de Astro
+const entrantes = productos.filter((item) => item.categoria === 2);
+const principales = productos.filter((item) => item.categoria === 3);
+const postres = productos.filter((item) => item.categoria === 4);
+const bebidas = productos.filter((item) => item.categoria === 1);
 ---
 
 <Layout title="Welcome to quickorder.">
-	<main>
-		<div class="mx-auto max-w-screen-md mb-10">
-			<Header />
+  <section
+    class="bg-white dark:bg-gray-900 mt-5 flex items-center justify-center"
+  >
+    <h1
+      class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl"
+    >
+      <span
+        class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400"
+        >Quickorder</span
+      >
+    </h1>
+  </section>
 
-			<div class="mt-5" id="accordion-arrow-icon" data-accordion="open">
-				<h2 id="accordion-arrow-icon-heading-1">
-					<button
-						type="button"
-						class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-						data-accordion-target="#accordion-arrow-icon-body-1"
-						aria-expanded="false"
-						aria-controls="accordion-arrow-icon-body-1"
-					>
-						<span class="font-bold">Entrantes</span>
-						<AccordeonSvg />
-					</button>
-				</h2>
-				<div
-					id="accordion-arrow-icon-body-1"
-					class="hidden"
-					aria-labelledby="accordion-arrow-icon-heading-1"
-				>
-					<div
-						class="p-5 border border-t-0 border-gray-200 dark:border-gray-700"
-					>
-						{
-							entrantes.map((entrante: Producto) => (
-								<List
-									id={entrante.id}
-									nombre={entrante.nombre}
-									precio={entrante.precio}
-								/>
-							))
-						}
-					</div>
-				</div>
-
-				<hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-				<h2 id="accordion-arrow-icon-heading-2">
-					<button
-						type="button"
-						class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-						data-accordion-target="#accordion-arrow-icon-body-2"
-						aria-expanded="false"
-						aria-controls="accordion-arrow-icon-body-2"
-					>
-						<span class="font-bold">Principales</span>
-						<AccordeonSvg />
-					</button>
-				</h2>
-				<div
-					id="accordion-arrow-icon-body-2"
-					class="hidden"
-					aria-labelledby="accordion-arrow-icon-heading-2"
-				>
-					<div
-						class="p-5 border border-t-0 border-gray-200 dark:border-gray-700"
-					>
-						{
-							principales.map((principal: Producto) => (
-								<List
-									id={principal.id}
-									nombre={principal.nombre}
-									precio={principal.precio}
-								/>
-							))
-						}
-					</div>
-				</div>
-
-				<hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-				<h2 id="accordion-arrow-icon-heading-3">
-					<button
-						type="button"
-						class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-						data-accordion-target="#accordion-arrow-icon-body-3"
-						aria-expanded="false"
-						aria-controls="accordion-arrow-icon-body-3"
-					>
-						<span class="font-bold">Postres</span>
-						<AccordeonSvg />
-					</button>
-				</h2>
-				<div
-					id="accordion-arrow-icon-body-3"
-					class="hidden"
-					aria-labelledby="accordion-arrow-icon-heading-3"
-				>
-					<div
-						class="p-5 border border-t-0 border-gray-200 dark:border-gray-700"
-					>
-						{
-							postres.map((postre: Producto) => (
-								<List
-									id={postre.id}
-									nombre={postre.nombre}
-									precio={postre.precio}
-								/>
-							))
-						}
-					</div>
-				</div>
-
-				<hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
-
-				<h2 id="accordion-arrow-icon-heading-4">
-					<button
-						type="button"
-						class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-						data-accordion-target="#accordion-arrow-icon-body-4"
-						aria-expanded="false"
-						aria-controls="accordion-arrow-icon-body-4"
-					>
-						<span class="font-bold">Bebidas</span>
-						<AccordeonSvg />
-					</button>
-				</h2>
-				<div
-					id="accordion-arrow-icon-body-4"
-					class="hidden"
-					aria-labelledby="accordion-arrow-icon-heading-4"
-				>
-					<div
-						class="p-5 border border-t-0 border-gray-200 dark:border-gray-700"
-					>
-						{
-							bebidas.map((bebida: Producto) => (
-								<List
-									id={bebida.id}
-									nombre={bebida.nombre}
-									precio={bebida.precio}
-								/>
-							))
-						}
-					</div>
-				</div>
-			</div>
-
-			<div class="container mt-5 flex flex-row justify-between">
-				<ButtonEnviarPedido />
-
-				<ButtonSolicitarAsistencia />
-
-				<ButtonSolicitarCuenta />
-			</div>
-		</div>
-	</main>
+  <App
+    productos={productos}
+    entrantes={entrantes}
+    principales={principales}
+    postres={postres}
+    bebidas={bebidas}
+    client:load
+  />
 </Layout>
