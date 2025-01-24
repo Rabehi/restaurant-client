@@ -3,7 +3,8 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "kill-port": "npx kill-port 4321",
+    "dev": "npm run kill-port && astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
@@ -26,6 +27,7 @@
     "@babel/parser": "^7.26.5",
     "@types/react": "^18.2.79",
     "astro": "^4.16.16",
+    "kill-port": "^2.0.1",
     "vite": "^6.0.7"
   }
 }
