@@ -21,7 +21,7 @@ const initialState: State = {
 // Definir las acciones posibles
 type Action =
     | { type: 'ADD_ITEM'; payload: Item }
-    | { type: 'REMOVE_ITEM'; payload: number }; // El índice del item a eliminar
+    | { type: 'REMOVE_ITEM'; payload: number }; // El payload es el ID del item a eliminar
 
 // Definir el reducer con los tipos
 const reducer = (state: State, action: Action): State => {
@@ -32,8 +32,21 @@ const reducer = (state: State, action: Action): State => {
             return { items: updatedItems, total: updatedTotal };
         }
         case 'REMOVE_ITEM': {
-            const filteredItems = state.items.filter((_, index) => index !== action.payload);
+            // Encontrar el índice del primer elemento con el ID especificado
+            const itemIndex = state.items.findIndex((item) => item.id === action.payload);
+            if (itemIndex === -1) {
+                return state; // Si no se encuentra el elemento, no hacer nada
+            }
+
+            // Crear un nuevo array sin el elemento en el índice encontrado
+            const filteredItems = [
+                ...state.items.slice(0, itemIndex), // Elementos antes del índice
+                ...state.items.slice(itemIndex + 1), // Elementos después del índice
+            ];
+
+            // Calcular el nuevo total
             const newTotal = filteredItems.reduce((total, item) => total + Number(item.precio), 0);
+
             return { items: filteredItems, total: newTotal };
         }
         default:
@@ -57,7 +70,7 @@ interface OrderProviderProps {
 export const OrderProvider: React.FC<OrderProviderProps> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    console.log("Estado inicial: ", state);
+    console.log("Estado actual: ", state); // Para depuración
 
     return (
         <OrderContext.Provider value={{ state, dispatch }}>

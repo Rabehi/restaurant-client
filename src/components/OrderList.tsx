@@ -21,10 +21,7 @@ export const OrderList: React.FC<OrderListProps> = ({ items }) => {
     };
 
     const handleRemoveItem = (id: number) => {
-        const itemIndex = items.findIndex((item) => item.id === id);
-        if (itemIndex !== -1) {
-            dispatch({ type: 'REMOVE_ITEM', payload: itemIndex });
-        }
+        dispatch({ type: 'REMOVE_ITEM', payload: id }); // Pasamos el ID directamente
     };
 
     if (!Array.isArray(items) || items.length === 0) {
