@@ -3,11 +3,42 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'flowbite/dist/flowbite.css'
 import 'react-toastify/dist/ReactToastify.css';
 import ButtonIcon from './ButtonIcon';
+import axios from 'axios';
 
 const ButtonEnviarPedidots: React.FC = () => {
     const handleButtonClick = () => {
         toast.success('¡Pedido enviado!');
     };
+
+    /*const handleSubmitOrder = async () => {
+    try {
+      const comandaResponse = await axios.post('http://localhost:3000/comanda', {
+        idMesa: 1,
+        pagado: false,
+        fecha: new Date().toISOString().split('T')[0],
+        totalpagar: calculateTotal()
+      });
+
+      const comandaId = comandaResponse.data.id;
+
+      for (const [productId, item] of Object.entries(selectedProducts)) {
+        await axios.post('http://localhost:3000/detalle_comanda', {
+          idcomanda: comandaId,
+          idproducto: parseInt(productId),
+          cantidad: item.cantidad,
+          precio: item.precio
+        });
+      }
+
+      await axios.put('/mesas/1', { estado: 1 });
+      alert('Order submitted successfully!');
+      setSelectedProducts({});
+    } catch (error) {
+      console.error('Error submitting order:', error);
+      alert('Error submitting order');
+    }
+  };*/
+
 
     return (
         <div>

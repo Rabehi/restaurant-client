@@ -3,11 +3,20 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'flowbite/dist/flowbite.css'
 import 'react-toastify/dist/ReactToastify.css';
 import ButtonIcon from './ButtonIcon';
+import axios from 'axios';
 
 const ButtonSolicitarAsistenciats: React.FC = () => {
-    const handleButtonClick = () => {
-        toast.warn('¡Asistencia solicitada!');
+    const handleButtonClick = async () => {
+
+        try {
+            await axios.put('http://localhost:3000/mesas/1', { estado: 3 });
+            toast.warn('¡Asistencia solicitada!');
+        } catch (error) {
+            console.error('Error requesting assistance:', error);
+            toast.error('Error requesting assistance');
+        }
     };
+
 
     return (
         <div>

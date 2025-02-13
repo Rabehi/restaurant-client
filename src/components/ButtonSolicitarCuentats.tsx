@@ -3,11 +3,21 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'flowbite/dist/flowbite.css'
 import 'react-toastify/dist/ReactToastify.css';
 import ButtonIcon from './ButtonIcon';
+import axios from 'axios';
 
 const ButtonSolicitarCuentats: React.FC = () => {
-    const handleButtonClick = () => {
-        toast.warn('¡Cuenta solicitada!');
+    const handleButtonClick = async () => {
+
+        try {
+            // TODO: id de la url ??
+            await axios.put('http://localhost:3000/mesas/1', { estado: 4 });
+            toast.info('¡Cuenta solicitada!');
+        } catch (error) {
+            console.error('Error requesting bill:', error);
+            toast.error('Error requesting bill');
+        }
     };
+
 
     return (
         <div>

@@ -1,5 +1,4 @@
 import React from "react";
-import OrderList from "./OrderList";
 import { OrderProvider } from "../context/OrderContext";
 import AccordionSection from "./AccordeonSection";
 import ButtonEnviarPedidots from "./ButtonEnviarPedidots";

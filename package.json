@@ -16,6 +16,7 @@
         "@astrojs/tailwind": "^5.1.0",
         "@babel/core": "^7.26.0",
         "@types/react-dom": "^18.2.25",
+        "axios": "^1.7.9",
         "esbuild": "^0.24.2",
         "flowbite": "^2.3.0",
         "react": "^18.2.0",
