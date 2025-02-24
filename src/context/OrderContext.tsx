@@ -6,6 +6,7 @@ interface Item {
     id: number;
     nombre: string;
     precio: number;
+    cantidad: number;
 }
 
 interface State {
@@ -21,33 +22,42 @@ const initialState: State = {
 // Definir las acciones posibles
 type Action =
     | { type: 'ADD_ITEM'; payload: Item }
-    | { type: 'REMOVE_ITEM'; payload: number }; // El payload es el ID del item a eliminar
+    | { type: 'REMOVE_ITEM'; payload: number } // El payload es el ID del item a eliminar
+    | { type: 'UPDATE_QUANTITY'; payload: { id: number; cantidad: number } }
+    | { type: 'CLEAR_CART' };
 
 // Definir el reducer con los tipos
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
         case 'ADD_ITEM': {
-            const updatedItems = [...state.items, action.payload];
-            const updatedTotal = updatedItems.reduce((total, item) => total + Number(item.precio), 0);
+            const itemIndex = state.items.findIndex((item) => item.id === action.payload.id);
+            if (itemIndex !== -1) {
+                const updatedItems = state.items.map((item) =>
+                    item.id === action.payload.id
+                        ? { ...item, cantidad: item.cantidad + 1 }
+                        : item
+                );
+                const updatedTotal = updatedItems.reduce((total, item) => total + item.precio * item.cantidad, 0);
+                return { items: updatedItems, total: updatedTotal };
+            }
+            const updatedItems = [...state.items, { ...action.payload, cantidad: 1 }];
+            const updatedTotal = updatedItems.reduce((total, item) => total + item.precio * item.cantidad, 0);
+            return { items: updatedItems, total: updatedTotal };
+        }
+        case 'UPDATE_QUANTITY': {
+            const updatedItems = state.items.map((item) =>
+                item.id === action.payload.id ? { ...item, cantidad: action.payload.cantidad } : item
+            );
+            const updatedTotal = updatedItems.reduce((total, item) => total + item.precio * item.cantidad, 0);
             return { items: updatedItems, total: updatedTotal };
         }
         case 'REMOVE_ITEM': {
-            // Encontrar el índice del primer elemento con el ID especificado
-            const itemIndex = state.items.findIndex((item) => item.id === action.payload);
-            if (itemIndex === -1) {
-                return state; // Si no se encuentra el elemento, no hacer nada
-            }
-
-            // Crear un nuevo array sin el elemento en el índice encontrado
-            const filteredItems = [
-                ...state.items.slice(0, itemIndex), // Elementos antes del índice
-                ...state.items.slice(itemIndex + 1), // Elementos después del índice
-            ];
-
-            // Calcular el nuevo total
-            const newTotal = filteredItems.reduce((total, item) => total + Number(item.precio), 0);
-
+            const filteredItems = state.items.filter((item) => item.id !== action.payload);
+            const newTotal = filteredItems.reduce((total, item) => total + item.precio * item.cantidad, 0);
             return { items: filteredItems, total: newTotal };
+        }
+        case 'CLEAR_CART': {
+            return { items: [], total: 0 }; // Limpia el carrito
         }
         default:
             return state;

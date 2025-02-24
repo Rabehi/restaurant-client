@@ -1,26 +1,26 @@
-import { useState } from "react";
+import { useOrder } from "../context/OrderContext";
 
 // Definimos los tipos de las props
 interface ListProps {
     id: number;
     nombre: string;
     precio: number;
+    cantidad: number;
     onAddItem: (id: number, nombre: string, precio: number) => void;
     onRemoveItem: (id: number) => void;
 }
 
 const List: React.FC<ListProps> = ({ id, nombre, precio, onAddItem, onRemoveItem }) => {
-    const [count, setCount] = useState<number>(0);
+    const { state } = useOrder();
+    const count = state.items.find((item) => item.id === id)?.cantidad || 0;
 
     const handleIncrement = () => {
-        setCount((prevCount) => prevCount + 1);
-        onAddItem(id, nombre, precio); // Llama la función para agregar el ítem
+        onAddItem(id, nombre, precio);
     };
 
     const handleDecrement = () => {
         if (count > 0) {
-            setCount((prevCount) => prevCount - 1);
-            onRemoveItem(id); // Llama la función para eliminar el ítem
+            onRemoveItem(id);
         }
     };
 
@@ -30,7 +30,7 @@ const List: React.FC<ListProps> = ({ id, nombre, precio, onAddItem, onRemoveItem
                 {/* Contenedor Izquierdo: Imagen, Nombre y Precio */}
                 <div className="flex items-center space-x-4">
                     <img
-                        src="https://via.placeholder.com/50" // Reemplaza con la URL de la imagen del producto
+                        src="https://dummyimage.com/50x50/000/fff" // Reemplaza con la URL de la imagen del producto
                         alt={nombre}
                         className="w-12 h-12 object-cover rounded-lg"
                     />
@@ -94,7 +94,6 @@ const List: React.FC<ListProps> = ({ id, nombre, precio, onAddItem, onRemoveItem
                 </div>
             </div>
         </div>
-
     );
 };
 
