@@ -6,11 +6,12 @@ interface ListProps {
     nombre: string;
     precio: number;
     cantidad: number;
+    imagen: string;
     onAddItem: (id: number, nombre: string, precio: number) => void;
     onRemoveItem: (id: number) => void;
 }
 
-const List: React.FC<ListProps> = ({ id, nombre, precio, onAddItem, onRemoveItem }) => {
+const List: React.FC<ListProps> = ({ id, nombre, precio, imagen, onAddItem, onRemoveItem }) => {
     const { state } = useOrder();
     const count = state.items.find((item) => item.id === id)?.cantidad || 0;
 
@@ -30,7 +31,7 @@ const List: React.FC<ListProps> = ({ id, nombre, precio, onAddItem, onRemoveItem
                 {/* Contenedor Izquierdo: Imagen, Nombre y Precio */}
                 <div className="flex items-center space-x-4">
                     <img
-                        src="https://dummyimage.com/50x50/000/fff" // Reemplaza con la URL de la imagen del producto
+                        src={imagen}
                         alt={nombre}
                         className="w-12 h-12 object-cover rounded-lg"
                     />

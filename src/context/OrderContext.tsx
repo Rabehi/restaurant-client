@@ -7,6 +7,7 @@ interface Item {
     nombre: string;
     precio: number;
     cantidad: number;
+    imagen: string;
 }
 
 interface State {

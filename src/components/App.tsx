@@ -12,6 +12,7 @@ interface Producto {
     nombre: string;
     precio: number;
     categoria: number;
+    imagen: string;
 }
 
 interface AppProps {
