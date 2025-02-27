@@ -7,32 +7,65 @@ const response = await fetch("http://localhost:3000/productos");
 const productos = await response.json();
 
 // Filtrar las categorías dentro de Astro
-const entrantes = productos.filter((item) => item.categoria === 2);
-const principales = productos.filter((item) => item.categoria === 3);
-const postres = productos.filter((item) => item.categoria === 4);
-const bebidas = productos.filter((item) => item.categoria === 1);
+const entrantes = productos.filter(
+  (item: { categoria: number }) => item.categoria === 2,
+);
+const principales = productos.filter(
+  (item: { categoria: number }) => item.categoria === 3,
+);
+const postres = productos.filter(
+  (item: { categoria: number }) => item.categoria === 4,
+);
+const bebidas = productos.filter(
+  (item: { categoria: number }) => item.categoria === 1,
+);
 ---
 
 <Layout title="Welcome to quickorder.">
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
-    h1 {
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+    /* Animación de entrada */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header-container {
       font-family: "Poppins", sans-serif;
+      text-align: center;
+      padding: 1.5rem 1rem; /* Padding reducido */
+    }
+
+    .header-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #1f2937; /* Gris oscuro */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 0; /* Eliminamos el margen inferior */
+    }
+
+    .animated-text {
+      animation: fadeInUp 1s ease-out;
+      display: inline-block;
+      background: linear-gradient(to right, #2563eb, #facc15, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
   </style>
 
-  <section
-    class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 py-20 px-5"
-  >
-    <h1
-      class="mb-8 text-4xl font-bold text-gray-900 dark:text-white md:text-5xl lg:text-6xl text-center"
-    >
-      <span
-        class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400"
-      >
-        Quickorder
-      </span>
-    </h1>
+  <section class="header-container">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="header-title">
+        <span class="animated-text">Quickorder</span>
+      </h1>
+    </div>
   </section>
 
   <App

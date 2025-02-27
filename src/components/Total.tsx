@@ -6,10 +6,12 @@ export const Total: React.FC = () => {
     const total = state.total;
 
     return (
-        <div className="flex items-center justify-center">
-            <p className="text-2xl font-bold text-white bg-gradient-to-r from-green-400 to-blue-500 rounded-lg shadow-lg px-6 py-3">
-                Total: {total.toFixed(2)} €
-            </p>
+        <div className="flex items-center justify-center mt-4">
+            <div className="font-['Poppins']">
+                <p className="text-2xl font-bold text-center tracking-tight text-indigo-600 dark:text-indigo-400">
+                    Total: {total.toFixed(2)} €
+                </p>
+            </div>
         </div>
     );
 };
