@@ -1,6 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import App from "../components/App";
+import Header from "../components/Header.astro";
+
+const titleclient = "Quickorder";
 
 // Cargar los datos del servidor de manera síncrona
 const response = await fetch("http://localhost:3000/productos");
@@ -22,51 +25,7 @@ const bebidas = productos.filter(
 ---
 
 <Layout title="Welcome to quickorder.">
-  <style>
-    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
-
-    /* Animación de entrada */
-    @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .header-container {
-      font-family: "Poppins", sans-serif;
-      text-align: center;
-      padding: 1.5rem 1rem; /* Padding reducido */
-    }
-
-    .header-title {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #1f2937; /* Gris oscuro */
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-      margin-bottom: 0; /* Eliminamos el margen inferior */
-    }
-
-    .animated-text {
-      animation: fadeInUp 1s ease-out;
-      display: inline-block;
-      background: linear-gradient(to right, #2563eb, #facc15, #10b981);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-  </style>
-
-  <section class="header-container">
-    <div class="max-w-4xl mx-auto">
-      <h1 class="header-title">
-        <span class="animated-text">Quickorder</span>
-      </h1>
-    </div>
-  </section>
+  <Header title={titleclient} />
 
   <App
     productos={productos}
