@@ -12,12 +12,12 @@
     },
     "dependencies": {
         "@astrojs/check": "^0.5.10",
-        "@astrojs/react": "^3.6.3",
+        "@astrojs/react": "^4.2.1",
         "@astrojs/tailwind": "^5.1.0",
         "@babel/core": "^7.26.0",
         "@types/react-dom": "^18.2.25",
         "axios": "^1.7.9",
-        "esbuild": "^0.24.2",
+        "esbuild": "^0.25.0",
         "flowbite": "^2.3.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
@@ -28,7 +28,7 @@
     "devDependencies": {
         "@babel/parser": "^7.26.5",
         "@types/react": "^18.2.79",
-        "astro": "^4.16.18",
+        "astro": "^5.4.1",
         "kill-port": "^2.0.1",
         "vite": "^6.0.7"
     }
