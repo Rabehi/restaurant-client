@@ -1,10 +1,5 @@
-import React, { useEffect, useState } from "react";
-
-// Definimos el tipo Mesa
-interface Mesa {
-  id: number;
-  estado: number;
-}
+import React, { useEffect } from "react";
+import { useMesasStore } from "../context/MesasStore.ts";
 
 // Función para asignar color según estado
 const getColor = (estado: number) => {
@@ -25,34 +20,11 @@ const getColor = (estado: number) => {
 };
 
 const Mesas: React.FC = () => {
-  const [mesas, setMesas] = useState<Mesa[]>([]);
+  const { mesas, fetchMesas, updateMesa } = useMesasStore();
 
-  // Cargar mesas desde la API y ordenarlas por ID
   useEffect(() => {
-    fetch("http://localhost:3000/mesas")
-      .then((res) => res.json())
-      .then((data) => {
-        // Sort mesas by id in ascending order
-        const sortedMesas = data.sort((a, b) => a.id - b.id);
-        setMesas(sortedMesas);
-      })
-      .catch((error) => console.error("Error cargando mesas:", error));
-  }, []);
-
-  // Actualizar estado de una mesa
-  const updateMesaEstado = (id: number, estado: number) => {
-    fetch(`http://localhost:3000/mesas/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ estado }),
-    })
-      .then(() =>
-        setMesas((prev) =>
-          prev.map((mesa) => (mesa.id === id ? { ...mesa, estado } : mesa))
-        )
-      )
-      .catch((error) => console.error("Error actualizando mesa:", error));
-  };
+    fetchMesas();
+  }, [mesas]);
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg">
@@ -70,21 +42,18 @@ const Mesas: React.FC = () => {
               Mesa {mesa.id}
             </summary>
             <div className="p-5 flex flex-col gap-4 bg-gray-100">
-              {/* Nueva fila con el estado y los botones alineados */}
               <div className="flex justify-between items-center w-full">
-                <span className="text-lg font-semibold text-gray-700">
-                  Estado
-                </span>
+                <span className="text-lg font-semibold text-gray-700">Estado</span>
                 <div className="flex flex-1 justify-center gap-6">
                   <button
                     className="px-6 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 active:bg-green-700 transition duration-200"
-                    onClick={() => updateMesaEstado(mesa.id, 0)}
+                    onClick={() => updateMesa(mesa.id, 0)}
                   >
                     Libre
                   </button>
                   <button
                     className="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 active:bg-red-700 transition duration-200"
-                    onClick={() => updateMesaEstado(mesa.id, 1)}
+                    onClick={() => updateMesa(mesa.id, 1)}
                   >
                     Ocupada
                   </button>

@@ -1,21 +1,25 @@
 import React from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'flowbite/dist/flowbite.css'
-import 'react-toastify/dist/ReactToastify.css';
 import ButtonIcon from './ButtonIcon';
 import axios from 'axios';
+import { useMesasStore } from "../context/MesasStore.ts";
+
 
 const ButtonSolicitarAsistenciats: React.FC = () => {
-    const handleButtonClick = async () => {
+    const { updateMesa } = useMesasStore();
 
+    const handleButtonClick = async () => {
         try {
             await axios.put('http://localhost:3000/mesas/1', { estado: 3 });
+            updateMesa(1, 3);
             toast.warn('¡Asistencia solicitada!');
         } catch (error) {
             console.error('Error requesting assistance:', error);
             toast.error('Error requesting assistance');
         }
     };
+
 
 
     return (
@@ -28,7 +32,6 @@ const ButtonSolicitarAsistenciats: React.FC = () => {
                 text="Solicitar asistencia"
                 onClick={handleButtonClick}
             />
-            <ToastContainer />
         </div>
     );
 };

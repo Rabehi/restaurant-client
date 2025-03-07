@@ -1,7 +1,6 @@
 import React from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'flowbite/dist/flowbite.css'
-import 'react-toastify/dist/ReactToastify.css';
 import ButtonIcon from './ButtonIcon';
 import axios from 'axios';
 
@@ -29,7 +28,6 @@ const ButtonSolicitarCuentats: React.FC = () => {
                 text="Solicitar cuenta"
                 onClick={handleButtonClick}
             />
-            <ToastContainer />
         </div>
     );
 };

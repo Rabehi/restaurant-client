@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'flowbite/dist/flowbite.css'
-import 'react-toastify/dist/ReactToastify.css';
 import ButtonIcon from './ButtonIcon';
 import axios from 'axios';
 import { useOrder } from '../context/OrderContext';
@@ -87,7 +86,6 @@ const ButtonEnviarPedidots: React.FC = () => {
         onClick={handleButtonClick}
         disabled={loading}
       />
-      <ToastContainer />
     </div>
   );
 };

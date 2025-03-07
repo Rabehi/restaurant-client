@@ -5,6 +5,8 @@ import ButtonEnviarPedidots from "./ButtonEnviarPedidots";
 import ButtonSolicitarAsistenciats from "./ButtonSolicitarAsistenciats";
 import ButtonSolicitarCuentats from "./ButtonSolicitarCuentats";
 import Total from "./Total";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Definimos los tipos de las props que recibirá el componente
 interface Producto {
@@ -46,7 +48,10 @@ const App: React.FC<AppProps> = ({ entrantes, principales, postres, bebidas }) =
                     <ButtonSolicitarAsistenciats />
                     <ButtonSolicitarCuentats />
                 </div>
+
             </div>
+            <ToastContainer position="top-right" autoClose={3000} />
+
         </OrderProvider>
     );
 };
