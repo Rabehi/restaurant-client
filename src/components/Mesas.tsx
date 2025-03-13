@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useMesasStore } from "../context/MesasStore.ts";
+import Leyenda from "./Leyenda.astro";
 
 // Función para asignar color según estado
 const getColor = (estado: number) => {
@@ -62,33 +63,6 @@ const Mesas: React.FC = () => {
             </div>
           </details>
         ))}
-      </div>
-
-      {/* Leyenda de colores */}
-      <div className="mt-6 p-4 border-t">
-        <h3 className="text-lg text-gray-700 mb-3">Leyenda de estados</h3>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-white border border-gray-400"></div>
-            <span className="text-gray-700">Libre</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-yellow-400"></div>
-            <span className="text-gray-700">Ocupada</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-red-500"></div>
-            <span className="text-gray-700">Pendiente servir</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-blue-500"></div>
-            <span className="text-gray-700">Pendiente asistencia</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-green-500"></div>
-            <span className="text-gray-700">Cuenta solicitada</span>
-          </div>
-        </div>
       </div>
     </div>
   );

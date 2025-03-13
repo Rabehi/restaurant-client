@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Mesas from "../components/Mesas";
+import Leyenda from "../components/Leyenda.astro";
 
 const titleadmin = "Quickorder Admin";
 ---
@@ -9,4 +10,5 @@ const titleadmin = "Quickorder Admin";
 <Layout title="Quickorder Admin.">
     <Header title={titleadmin} />
     <Mesas client:load />
+    <Leyenda />
 </Layout>
