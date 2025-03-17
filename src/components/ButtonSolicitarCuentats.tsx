@@ -1,22 +1,24 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import 'flowbite/dist/flowbite.css'
+import 'flowbite/dist/flowbite.css';
 import ButtonIcon from './ButtonIcon';
 import axios from 'axios';
+import { useMesasStore } from "../context/MesasStore.ts";
 
 const ButtonSolicitarCuentats: React.FC = () => {
-    const handleButtonClick = async () => {
+    const { updateMesa } = useMesasStore();
 
+    const handleButtonClick = async () => {
         try {
-            // TODO: id de la url ??
+            // TODO: id dinamico
             await axios.put('http://localhost:3000/mesas/1', { estado: 4 });
+            updateMesa(1, 4); // Actualizar el estado de la mesa localmente
             toast.info('¡Cuenta solicitada!');
         } catch (error) {
             console.error('Error requesting bill:', error);
             toast.error('Error requesting bill');
         }
     };
-
 
     return (
         <div>

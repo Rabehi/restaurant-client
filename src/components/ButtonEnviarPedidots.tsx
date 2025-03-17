@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import 'flowbite/dist/flowbite.css'
+import 'flowbite/dist/flowbite.css';
 import ButtonIcon from './ButtonIcon';
 import axios from 'axios';
 import { useOrder } from '../context/OrderContext';
+import { useMesasStore } from "../context/MesasStore.ts";
 
 const ButtonEnviarPedidots: React.FC = () => {
   const { state, dispatch } = useOrder(); // Accede al estado global
+  const { updateMesa } = useMesasStore();
   const [loading, setLoading] = useState(false);
 
   const handleButtonClick = async () => {
@@ -20,6 +22,7 @@ const ButtonEnviarPedidots: React.FC = () => {
     try {
       // 1️⃣ Crear la comanda
       const comandaResponse = await axios.post('http://localhost:3000/comanda', {
+        // TODO: id dinamico
         idMesa: 1,
         pagado: false,
         fecha: new Date().toISOString().split('T')[0],
@@ -42,9 +45,10 @@ const ButtonEnviarPedidots: React.FC = () => {
 
       // 3️⃣ Actualizar estado de la mesa
       await axios.put('http://localhost:3000/mesas/1', { estado: 2 }); // Pendiente de servir
+      // TODO: id dinamico
+      updateMesa(1, 2); // Actualizar el estado de la mesa localmente
 
       // 4️⃣ Limpiar carrito después de enviar pedido
-      //state.items.forEach(item => dispatch({ type: 'REMOVE_ITEM', payload: item.id }));
       dispatch({ type: 'CLEAR_CART' });
 
       //toast.success('¡Pedido enviado con éxito!');
@@ -59,7 +63,6 @@ const ButtonEnviarPedidots: React.FC = () => {
       setLoading(false); // Habilita el botón después de la respuesta
     }
   };
-
 
   return (
     <div>
