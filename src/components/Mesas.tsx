@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { useMesasStore } from "../context/MesasStore.ts";
-import Leyenda from "./Leyenda.astro";
+import ComandasNoPagadas from "./ComandasNoPagadas";
 
-// Función para asignar color según estado
 const getColor = (estado: number) => {
   switch (estado) {
     case 0:
@@ -21,11 +20,17 @@ const getColor = (estado: number) => {
 };
 
 const Mesas: React.FC = () => {
-  const { mesas, fetchMesas, updateMesa } = useMesasStore();
+  const mesas = useMesasStore((state) => state.mesas);
+  console.log("Mesas actuales:", mesas);
+  const fetchMesas = useMesasStore((state) => state.fetchMesas);
+  const updateMesa = useMesasStore((state) => state.updateMesa);
 
+
+  // Cargamos las mesas al montar el componente
   useEffect(() => {
+    console.log("useEffect is running");
     fetchMesas();
-  }, [mesas]);
+  }, []);
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg">
@@ -43,8 +48,11 @@ const Mesas: React.FC = () => {
               Mesa {mesa.id}
             </summary>
             <div className="p-5 flex flex-col gap-4 bg-gray-100">
+              {/* Estado y botones */}
               <div className="flex justify-between items-center w-full">
-                <span className="text-lg font-semibold text-gray-700">Estado</span>
+                <span className="text-lg font-semibold text-gray-700">
+                  Estado
+                </span>
                 <div className="flex flex-1 justify-center gap-6">
                   <button
                     className="px-6 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 active:bg-green-700 transition duration-200"
@@ -60,6 +68,11 @@ const Mesas: React.FC = () => {
                   </button>
                 </div>
               </div>
+
+              {/* Mostrar comandas no pagadas si la mesa no está libre */}
+              {mesa.estado !== 0 && (
+                <ComandasNoPagadas mesaId={mesa.id} />
+              )}
             </div>
           </details>
         ))}
