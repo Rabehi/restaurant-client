@@ -38,6 +38,11 @@ export const useMesasStore = create<MesasStore>((set) => {
                         ),
                     }));
                 }
+                // Manejar actualización de comandas
+                if (message.type === "updateComanda") {
+                    // Forzar recarga de comandas
+                    set(state => ({ ...state }));
+                }
             };
 
             ws.onclose = () => {
