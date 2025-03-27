@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useMesasStore } from "../context/MesasStore";
 
-interface DetalleNoPagado {
+interface DetalleComanda {
     id: number;
     idcomanda: number;
     idproducto: number;
     cantidad: number;
     precio: number;
     producto_nombre: string;
+    servido: boolean; // Nuevo campo para control local
 }
 
 interface ComandasNoPagadasProps {
@@ -15,16 +16,34 @@ interface ComandasNoPagadasProps {
 }
 
 const ComandasNoPagadas: React.FC<ComandasNoPagadasProps> = ({ mesaId }) => {
-    const [detalles, setDetalles] = useState<DetalleNoPagado[]>([]);
+    const [detalles, setDetalles] = useState<DetalleComanda[]>([]);
     const [loading, setLoading] = useState(true);
     const { mesas } = useMesasStore();
+    const [ultimoEstado, setUltimoEstado] = useState<number | null>(null);
+
+    const mesaActual = mesas.find(m => m.id === mesaId);
+    const estadoMesa = mesaActual?.estado || 0;
 
     const fetchComandas = () => {
         setLoading(true);
         fetch(`http://localhost:3000/detalle_comanda/no_pagado/${mesaId}`)
             .then((res) => res.json())
-            .then((data) => {
-                setDetalles(data);
+            .then((data: DetalleComanda[]) => {
+                setDetalles(prevDetalles => {
+                    // Mapear nuevos datos manteniendo el estado de servido
+                    const nuevosDetalles = data.map(item => {
+                        // Buscar si ya existía este detalle
+                        const existente = prevDetalles.find(d => d.id === item.id);
+
+                        return {
+                            ...item,
+                            // Mantener estado anterior si existe, sino aplicar lógica nueva
+                            servido: existente ? existente.servido : estadoMesa === 1
+                        };
+                    });
+
+                    return nuevosDetalles;
+                });
                 setLoading(false);
             })
             .catch((error) => {
@@ -34,11 +53,20 @@ const ComandasNoPagadas: React.FC<ComandasNoPagadasProps> = ({ mesaId }) => {
     };
 
     useEffect(() => {
-        fetchComandas();
+        // Solo actualizar si cambió el estado de la mesa
+        if (ultimoEstado !== estadoMesa) {
+            setDetalles(prev => prev.map(d => ({
+                ...d,
+                // Actualizar solo los items no servidos cuando el estado cambia a "Ocupada"
+                servido: d.servido || estadoMesa === 1
+            })));
+            setUltimoEstado(estadoMesa);
+        }
+    }, [estadoMesa]);
 
-        // Escuchar cambios en el estado de las mesas
-        // Esto se activará cuando llegue un mensaje WebSocket
-    }, [mesaId, mesas]); // Ahora depende de mesas
+    useEffect(() => {
+        fetchComandas();
+    }, [mesaId, mesas]);
 
     if (loading) {
         return <p>Cargando comandas...</p>;
@@ -59,8 +87,13 @@ const ComandasNoPagadas: React.FC<ComandasNoPagadasProps> = ({ mesaId }) => {
                         {index > 0 && detalles[index - 1].idcomanda !== detalle.idcomanda && (
                             <hr className="border-t border-gray-300 my-2" />
                         )}
-                        <div className="grid grid-cols-3 text-center gap-x-4">
-                            <span>{detalle.producto_nombre}</span>
+                        <div className="grid grid-cols-4 items-center text-center gap-x-2">
+                            {detalle.servido ? (
+                                <span className="text-green-500">✓</span>
+                            ) : (
+                                <span className="text-red-500">✗</span>
+                            )}
+                            <span className="text-left">{detalle.producto_nombre}</span>
                             <span>x{detalle.cantidad}</span>
                             <span>{(detalle.precio * detalle.cantidad).toFixed(2)} €</span>
                         </div>
