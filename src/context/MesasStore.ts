@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import axios from 'axios';
 
 interface Mesa {
     id: number;
@@ -14,90 +15,66 @@ interface MesasStore {
 export const useMesasStore = create<MesasStore>((set) => {
     let ws: WebSocket | null = null;
 
-    // Función para inicializar el WebSocket
     const initializeWebSocket = () => {
         if (typeof window !== "undefined") {
             ws = new WebSocket("ws://localhost:3030");
 
-            ws.onopen = () => {
-                console.log("Conexión WebSocket establecida");
-            };
-
-            ws.onerror = (error) => {
-                console.error("Error en la conexión WebSocket:", error);
-            };
+            ws.onopen = () => console.log("Conexión WebSocket establecida");
+            ws.onerror = (error) => console.error("Error en WebSocket:", error);
 
             ws.onmessage = (event) => {
                 const message = JSON.parse(event.data);
-                console.log("Mensaje recibido del servidor WebSocket:", message);
-
                 if (message.type === "updateMesa") {
-                    set((state) => ({
-                        mesas: state.mesas.map((mesa) =>
+                    set(state => ({
+                        mesas: state.mesas.map(mesa =>
                             mesa.id === message.id ? { ...mesa, estado: message.estado } : mesa
-                        ),
+                        )
                     }));
                 }
-                // Manejar actualización de comandas
-                if (message.type === "updateComanda") {
-                    // Forzar recarga de comandas
-                    set(state => ({ ...state }));
-                }
             };
 
-            ws.onclose = () => {
-                console.log("Conexión WebSocket cerrada. Intentando reconectar...");
-                // Intentar reconectar después de 5 segundos
-                setTimeout(initializeWebSocket, 5000);
-            };
+            ws.onclose = () => setTimeout(initializeWebSocket, 5000);
         }
     };
 
-    // Inicializar el WebSocket al montar el store
     initializeWebSocket();
 
-    // Función para cargar mesas
-    async function fetchMesas() {
-        console.log("fetchMesas() in store is called");
-
+    const fetchMesas = async () => {
         try {
-            const response = await fetch("http://localhost:3000/mesas");
-            const data = await response.json();
+            const { data } = await axios.get("http://localhost:3000/mesas");
             set({ mesas: data.sort((a: Mesa, b: Mesa) => a.id - b.id) });
         } catch (error) {
             console.error("Error al cargar mesas:", error);
         }
-    }
+    };
 
-    // Función para actualizar estado de una mesa
-    async function updateMesa(id: number, estado: number) {
+    const updateMesa = async (id: number, estado: number) => {
         try {
-            await fetch(`http://localhost:3000/mesas/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ estado }),
-            });
-
-            // Notificar al servidor WebSocket (si está disponible)
-            if (ws) {
-                ws.send(JSON.stringify({ type: "updateMesa", id, estado }));
+            if (estado === 0) { // Solo para estado Libre
+                await axios.put(`http://localhost:3000/comanda/marcar-pagadas/${id}`);
             }
 
-            // Actualizar el estado local
-            set((state) => ({
-                mesas: state.mesas.map((mesa) =>
+            await axios.put(`http://localhost:3000/mesas/${id}`, { estado });
+
+            if (ws?.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    type: "updateMesa",
+                    id,
+                    estado
+                }));
+            }
+
+            set(state => ({
+                mesas: state.mesas.map(mesa =>
                     mesa.id === id ? { ...mesa, estado } : mesa
-                ),
+                )
             }));
+
         } catch (error) {
             console.error("Error actualizando mesa:", error);
+            throw error; // Puedes manejar este error en el componente
         }
-    }
-
-    // Retornamos el estado inicial y las funciones
-    return {
-        mesas: [],
-        fetchMesas,
-        updateMesa,
     };
+
+    return { mesas: [], fetchMesas, updateMesa };
 });
