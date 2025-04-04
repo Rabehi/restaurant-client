@@ -1,11 +1,27 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import App from "../components/App";
-import Header from "../components/Header.astro";
+import Layout from "../../layouts/Layout.astro";
+import App from "../../components/App";
+import Header from "../../components/Header.astro";
 
 const titleclient = "Quickorder";
 
-// Cargar los datos del servidor de manera síncrona
+
+// 1. Definir los IDs de las mesas (1 al 10)
+export async function getStaticPaths() {
+    return Array.from({ length: 10 }, (_, i) => ({
+        params: { id: (i + 1).toString() }, // Convertir a string (los params son siempre strings)
+    }));
+}
+
+// 2. Obtener el ID de la ruta
+const { id } = Astro.params;
+
+// 3. Validar el ID (opcional, pero recomendado)
+if (!id || !/^[1-9]|10$/.test(id)) {
+    return Response.redirect('/error');
+}
+
+// 4. Cargar los datos del servidor de manera síncrona
 const response = await fetch("http://localhost:3000/productos");
 const productos = await response.json();
 
@@ -28,6 +44,7 @@ const bebidas = productos.filter(
   <Header title={titleclient} />
 
   <App
+    mesaId={id}
     productos={productos}
     entrantes={entrantes}
     principales={principales}

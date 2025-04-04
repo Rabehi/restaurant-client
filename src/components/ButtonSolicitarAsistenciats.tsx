@@ -2,17 +2,22 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import 'flowbite/dist/flowbite.css'
 import ButtonIcon from './ButtonIcon';
-import axios from 'axios';
 import { useMesasStore } from "../context/MesasStore.ts";
 
+interface Props {
+    mesaId: string;
+}
 
-const ButtonSolicitarAsistenciats: React.FC = () => {
-    const { updateMesa } = useMesasStore();
+const ButtonSolicitarAsistenciats: React.FC = ({ mesaId }) => {
+    const updateMesa = useMesasStore((state) => state.updateMesa);
 
     const handleButtonClick = async () => {
+        if (!mesaId) {
+            toast.error('ID de mesa no disponible');
+            return;
+        }
         try {
-            await axios.put('http://localhost:3000/mesas/1', { estado: 3 });
-            updateMesa(1, 3);
+            await updateMesa(mesaId, 3); // // Actualizar el estado de la mesa API + WS + estado local
             toast.warn('¡Asistencia solicitada!');
         } catch (error) {
             console.error('Error requesting assistance:', error);

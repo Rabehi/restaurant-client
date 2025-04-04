@@ -2,17 +2,22 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import 'flowbite/dist/flowbite.css';
 import ButtonIcon from './ButtonIcon';
-import axios from 'axios';
 import { useMesasStore } from "../context/MesasStore.ts";
 
-const ButtonSolicitarCuentats: React.FC = () => {
-    const { updateMesa } = useMesasStore();
+interface Props {
+    mesaId: string;
+}
+const ButtonSolicitarCuentats: React.FC = ({ mesaId }) => {
+    const updateMesa = useMesasStore((state) => state.updateMesa);
+    const mesas = useMesasStore((state) => state.mesas); // Esto lo suscribe
 
     const handleButtonClick = async () => {
         try {
-            // TODO: id dinamico
-            await axios.put('http://localhost:3000/mesas/1', { estado: 4 });
-            updateMesa(1, 4); // Actualizar el estado de la mesa localmente
+            if (!mesaId) {
+                toast.error('ID de mesa no disponible');
+                return;
+            }
+            await updateMesa(mesaId, 4); // Actualizar el estado de la mesa API + WS + estado local
             toast.info('¡Cuenta solicitada!');
         } catch (error) {
             console.error('Error requesting bill:', error);

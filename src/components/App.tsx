@@ -18,6 +18,7 @@ interface Producto {
 }
 
 interface AppProps {
+    mesaId: string;
     productos: Producto[];
     entrantes: Producto[];
     principales: Producto[];
@@ -25,7 +26,7 @@ interface AppProps {
     bebidas: Producto[];
 }
 
-const App: React.FC<AppProps> = ({ entrantes, principales, postres, bebidas }) => {
+const App: React.FC<AppProps> = ({ mesaId, entrantes, principales, postres, bebidas }) => {
     return (
         <OrderProvider>
             <div className="mx-auto max-w-screen-md mb-10">
@@ -44,9 +45,9 @@ const App: React.FC<AppProps> = ({ entrantes, principales, postres, bebidas }) =
 
                 {/* Botones */}
                 <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                    <ButtonEnviarPedidots />
-                    <ButtonSolicitarAsistenciats />
-                    <ButtonSolicitarCuentats />
+                    <ButtonEnviarPedidots mesaId={mesaId} />
+                    <ButtonSolicitarAsistenciats mesaId={mesaId} />
+                    <ButtonSolicitarCuentats mesaId={mesaId} />
                 </div>
 
             </div>
