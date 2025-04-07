@@ -13,7 +13,7 @@ interface MesasStore {
     updateMesa: (id: number, estado: number) => Promise<void>;
 }
 
-export const useMesasStore = create<MesasStore>((set) => {
+export const useMesasStore = create<MesasStore>((set, get) => {
     let ws: WebSocket | null = null;
 
     const initializeWebSocket = () => {
@@ -26,11 +26,8 @@ export const useMesasStore = create<MesasStore>((set) => {
             ws.onmessage = (event) => {
                 const message = JSON.parse(event.data);
                 if (message.type === "updateMesa") {
-                    set(state => ({
-                        mesas: state.mesas.map(mesa =>
-                            mesa.id === message.id ? { ...mesa, estado: message.estado } : mesa
-                        )
-                    }));
+                    // re-fetch completo
+                    get().fetchMesas();
                 }
             };
 
@@ -43,7 +40,9 @@ export const useMesasStore = create<MesasStore>((set) => {
     const fetchMesas = async () => {
         try {
             const { data } = await axios.get("http://localhost:3000/mesas");
-            set({ mesas: data.sort((a: Mesa, b: Mesa) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()) });
+            set({
+                mesas: data.sort((a: Mesa, b: Mesa) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+            });
         } catch (error) {
             console.error("Error al cargar mesas:", error);
         }
@@ -56,7 +55,6 @@ export const useMesasStore = create<MesasStore>((set) => {
                 try {
                     await axios.put(`http://localhost:3000/comanda/marcar-pagadas/${id}`);
                 } catch (error) {
-                    // Si el error es un 404, lo ignoramos; de lo contrario, lo lanzamos
                     if (axios.isAxiosError(error) && error.response?.status === 404) {
                         console.warn(`No hay comandas para marcar como pagadas para la mesa ${id}.`);
                     } else {
@@ -79,7 +77,6 @@ export const useMesasStore = create<MesasStore>((set) => {
                 }));
             }
 
-            // Actualizamos el estado local: para ordenar por updated_at, actualizamos la lista completa
             set((state) => ({
                 mesas: state.mesas
                     .map((mesa) => (mesa.id === id ? mesaActualizada : mesa))
