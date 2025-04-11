@@ -65,7 +65,7 @@ export const useMesasStore = create<MesasStore>((set, get) => {
 
             // Actualizamos la mesa en el backend
             const response = await axios.put(`http://localhost:3000/mesas/${id}`, { estado });
-            const mesaActualizada = response.data; // Supongamos que incluye updated_at
+            const mesaActualizada = response.data;
 
             // Enviamos el mensaje por WebSocket para notificar a otros clientes
             if (ws?.readyState === WebSocket.OPEN) {

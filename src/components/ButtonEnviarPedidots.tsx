@@ -10,9 +10,8 @@ interface Props {
   mesaId: string;
 }
 
-const ButtonEnviarPedidots: React.FC = ({ mesaId }) => {
+const ButtonEnviarPedidots: React.FC<Props> = ({ mesaId }) => {
   const { state, dispatch } = useOrder(); // Accede al estado global
-  const mesas = useMesasStore((state) => state.mesas); // Esto lo suscribe
   const updateMesa = useMesasStore((state) => state.updateMesa);
   const [loading, setLoading] = useState(false);
 
@@ -45,7 +44,7 @@ const ButtonEnviarPedidots: React.FC = ({ mesaId }) => {
           axios.post('http://localhost:3000/detalle_comanda', {
             idcomanda: comandaId,
             idproducto: item.id,
-            cantidad: item.cantidad, // Puedes mejorar esto si manejas cantidades en el contexto
+            cantidad: item.cantidad,
             precio: item.precio,
           })
         )
@@ -57,7 +56,6 @@ const ButtonEnviarPedidots: React.FC = ({ mesaId }) => {
       // 4️⃣ Limpiar carrito después de enviar pedido
       dispatch({ type: 'CLEAR_CART' });
 
-      //toast.success('¡Pedido enviado con éxito!');
       setTimeout(() => {
         toast.success('¡Pedido enviado con éxito!');
       }, 100);

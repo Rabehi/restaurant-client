@@ -8,7 +8,7 @@ interface DetalleComanda {
     cantidad: number;
     precio: number;
     producto_nombre: string;
-    servido: boolean; // Nuevo campo para control local
+    servido: boolean; // control local si servido o no servido
 }
 
 interface ComandasNoPagadasProps {
@@ -80,7 +80,7 @@ const ComandasNoPagadas: React.FC<ComandasNoPagadasProps> = ({ mesaId }) => {
 
     return (
         <div className="space-y-2">
-            <p className="font-semibold text-gray-700">Comandas sin pagar:</p>
+            <p className="font-semibold text-gray-700">Comandas:</p>
             <div className="grid gap-y-2">
                 {detalles.map((detalle, index) => (
                     <React.Fragment key={detalle.id}>

@@ -81,8 +81,6 @@ interface OrderProviderProps {
 export const OrderProvider: React.FC<OrderProviderProps> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    console.log("Estado actual: ", state); // Para depuración
-
     return (
         <OrderContext.Provider value={{ state, dispatch }}>
             {children}

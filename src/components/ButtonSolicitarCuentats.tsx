@@ -7,9 +7,8 @@ import { useMesasStore } from "../context/MesasStore.ts";
 interface Props {
     mesaId: string;
 }
-const ButtonSolicitarCuentats: React.FC = ({ mesaId }) => {
+const ButtonSolicitarCuentats: React.FC<Props> = ({ mesaId }) => {
     const updateMesa = useMesasStore((state) => state.updateMesa);
-    const mesas = useMesasStore((state) => state.mesas); // Esto lo suscribe
 
     const handleButtonClick = async () => {
         try {

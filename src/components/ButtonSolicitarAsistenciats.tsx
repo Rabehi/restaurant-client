@@ -1,6 +1,6 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import 'flowbite/dist/flowbite.css'
+import 'flowbite/dist/flowbite.css';
 import ButtonIcon from './ButtonIcon';
 import { useMesasStore } from "../context/MesasStore.ts";
 
@@ -8,7 +8,7 @@ interface Props {
     mesaId: string;
 }
 
-const ButtonSolicitarAsistenciats: React.FC = ({ mesaId }) => {
+const ButtonSolicitarAsistenciats: React.FC<Props> = ({ mesaId }) => {
     const updateMesa = useMesasStore((state) => state.updateMesa);
 
     const handleButtonClick = async () => {

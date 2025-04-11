@@ -21,14 +21,12 @@ const getColor = (estado: number) => {
 
 const Mesas: React.FC = () => {
   const mesas = useMesasStore((state) => state.mesas);
-  console.log("Mesas actuales:", mesas);
   const fetchMesas = useMesasStore((state) => state.fetchMesas);
   const updateMesa = useMesasStore((state) => state.updateMesa);
 
 
   // Cargamos las mesas al montar el componente
   useEffect(() => {
-    console.log("useEffect is running");
     fetchMesas();
   }, []);
 
