@@ -17,7 +17,7 @@ const ButtonSolicitarAsistenciats: React.FC<Props> = ({ mesaId }) => {
             return;
         }
         try {
-            await updateMesa(mesaId, 3); // // Actualizar el estado de la mesa API + WS + estado local
+            await updateMesa(mesaId, 3); // Actualizar el estado de la mesa API + WS + estado local
             toast.warn('¡Asistencia solicitada!');
         } catch (error) {
             console.error('Error requesting assistance:', error);
