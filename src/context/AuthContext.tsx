@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
+import axios from 'axios';
 
 type User = {
     id: number;
@@ -18,7 +19,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User>(null);
 
-    // Cargar usuario desde localStorage solo en el cliente
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
@@ -27,38 +27,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     const login = async (email: string, password: string) => {
-        const response = await fetch('http://localhost:3000/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
+        try {
+            const response = await axios.post('http://localhost:3000/api/login', {
+                email,
+                password
+            });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || 'Error al iniciar sesión');
-        }
-
-        setUser(data.user);
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('user', JSON.stringify(data.user));
+            const userData = response.data.user;
+            setUser(userData);
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('user', JSON.stringify(userData));
+            }
+        } catch (error: any) {
+            const message =
+                error.response?.data?.error || 'Error al iniciar sesión';
+            throw new Error(message);
         }
     };
 
     const register = async (email: string, password: string) => {
-        const response = await fetch('http://localhost:3000/api/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
+        try {
+            await axios.post('http://localhost:3000/api/register', {
+                email,
+                password
+            });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || 'Error al registrarse');
+            await login(email, password);
+        } catch (error: any) {
+            const message =
+                error.response?.data?.error || 'Error al registrarse';
+            throw new Error(message);
         }
-
-        await login(email, password);
     };
 
     const logout = () => {
