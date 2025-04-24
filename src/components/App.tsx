@@ -7,6 +7,8 @@ import ButtonSolicitarCuentats from "./ButtonSolicitarCuentats";
 import Total from "./Total";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AuthButtons from './AuthButtons';
+import { AuthProvider } from '../context/AuthContext';
 
 // Definimos los tipos de las props que recibirá el componente
 interface Producto {
@@ -28,32 +30,35 @@ interface AppProps {
 
 const App: React.FC<AppProps> = ({ mesaId, entrantes, principales, postres, bebidas }) => {
     return (
-        <OrderProvider>
-            <div className="mx-auto max-w-screen-md mb-10">
-                <div className="mt-5 space-y-2">
-                    {/* Secciones del Menú */}
-                    <AccordionSection title="Entrantes" items={entrantes} />
-                    <AccordionSection title="Principales" items={principales} />
-                    <AccordionSection title="Postres" items={postres} />
-                    <AccordionSection title="Bebidas" items={bebidas} />
+        <AuthProvider>
+            <OrderProvider>
+                <div className="mx-auto max-w-screen-md mb-10">
+                    <AuthButtons />
+                    <div className="mt-5 space-y-2">
+                        {/* Secciones del Menú */}
+                        <AccordionSection title="Entrantes" items={entrantes} />
+                        <AccordionSection title="Principales" items={principales} />
+                        <AccordionSection title="Postres" items={postres} />
+                        <AccordionSection title="Bebidas" items={bebidas} />
+                    </div>
+
+                    {/* Total */}
+                    <div className="container mt-5 mb-10 flex justify-center">
+                        <Total />
+                    </div>
+
+                    {/* Botones */}
+                    <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                        <ButtonEnviarPedidots mesaId={mesaId} />
+                        <ButtonSolicitarAsistenciats mesaId={mesaId} />
+                        <ButtonSolicitarCuentats mesaId={mesaId} />
+                    </div>
+
                 </div>
+                <ToastContainer position="top-right" autoClose={3000} />
 
-                {/* Total */}
-                <div className="container mt-5 mb-10 flex justify-center">
-                    <Total />
-                </div>
-
-                {/* Botones */}
-                <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                    <ButtonEnviarPedidots mesaId={mesaId} />
-                    <ButtonSolicitarAsistenciats mesaId={mesaId} />
-                    <ButtonSolicitarCuentats mesaId={mesaId} />
-                </div>
-
-            </div>
-            <ToastContainer position="top-right" autoClose={3000} />
-
-        </OrderProvider>
+            </OrderProvider>
+        </AuthProvider>
     );
 };
 

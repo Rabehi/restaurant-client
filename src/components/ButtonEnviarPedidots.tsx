@@ -5,15 +5,18 @@ import ButtonIcon from './ButtonIcon';
 import axios from 'axios';
 import { useOrder } from '../context/OrderContext';
 import { useMesasStore } from "../context/MesasStore.ts";
+import { useAuth } from '../context/AuthContext';
 
 interface Props {
   mesaId: string;
 }
 
 const ButtonEnviarPedidots: React.FC<Props> = ({ mesaId }) => {
-  const { state, dispatch } = useOrder(); // Accede al estado global
+  const { state, dispatch } = useOrder();
   const updateMesa = useMesasStore((state) => state.updateMesa);
   const [loading, setLoading] = useState(false);
+  const { user } = useAuth(); // 💡 obtenemos el usuario autenticado
+  const idusuario = user?.id;
 
   const handleButtonClick = async () => {
     if (state.items.length === 0) {
@@ -21,24 +24,30 @@ const ButtonEnviarPedidots: React.FC<Props> = ({ mesaId }) => {
       return;
     }
 
-    setLoading(true); // Deshabilita el botón mientras carga
+    setLoading(true);
 
     try {
       if (!mesaId) {
         toast.error('ID de mesa no disponible');
         return;
       }
-      // 1️⃣ Crear la comanda
-      const comandaResponse = await axios.post('http://localhost:3000/comanda', {
+
+      // Crear la comanda con o sin idusuario
+      const comandaPayload: any = {
         idMesa: mesaId,
         pagado: false,
         fecha: new Date().toISOString().split('T')[0],
         totalpagar: state.total,
-      });
+      };
 
+      if (idusuario) {
+        comandaPayload.idusuario = idusuario;
+      }
+
+      const comandaResponse = await axios.post('http://localhost:3000/comanda', comandaPayload);
       const comandaId = comandaResponse.data.id;
 
-      // 2️⃣ Guardar cada producto en detalle_comanda
+      // Guardar los productos en detalle_comanda
       await Promise.all(
         state.items.map(item =>
           axios.post('http://localhost:3000/detalle_comanda', {
@@ -50,10 +59,7 @@ const ButtonEnviarPedidots: React.FC<Props> = ({ mesaId }) => {
         )
       );
 
-      // 3️⃣ Actualizar estado de la mesa
-      await updateMesa(mesaId, 2); // Actualizar el estado de la mesa API + WS + estado local
-
-      // 4️⃣ Limpiar carrito después de enviar pedido
+      await updateMesa(mesaId, 2); // Cambiar estado de la mesa
       dispatch({ type: 'CLEAR_CART' });
 
       setTimeout(() => {
@@ -64,7 +70,7 @@ const ButtonEnviarPedidots: React.FC<Props> = ({ mesaId }) => {
       console.error('Error al enviar el pedido:', error);
       toast.error('Error al enviar el pedido');
     } finally {
-      setLoading(false); // Habilita el botón después de la respuesta
+      setLoading(false);
     }
   };
 
