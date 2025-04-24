@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthButtons from './AuthButtons';
 import { AuthProvider } from '../context/AuthContext';
+import HistoricoPedidos from "./HistoricoPedidos";
 
 // Definimos los tipos de las props que recibirá el componente
 interface Producto {
@@ -52,6 +53,10 @@ const App: React.FC<AppProps> = ({ mesaId, entrantes, principales, postres, bebi
                         <ButtonEnviarPedidots mesaId={mesaId} />
                         <ButtonSolicitarAsistenciats mesaId={mesaId} />
                         <ButtonSolicitarCuentats mesaId={mesaId} />
+                    </div>
+                    <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                        <HistoricoPedidos />
+
                     </div>
 
                 </div>
