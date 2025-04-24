@@ -51,7 +51,7 @@ const HistoricoPedidos = () => {
     return (
         <div className="px-4 py-4">
             <ButtonIcon
-                color="blue"
+                color="gray"
                 icon={
                     <svg
                         className="w-5 h-5 text-white me-2"
